@@ -1,3 +1,31 @@
+html {
+  height: 100vh;
+}
 body {
   margin: 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  /* background: rgb(255, 255, 255); */
+  background: radial-gradient(circle at center, rgb(35, 47, 61) 0%, rgb(8, 10, 12) 100%);
+}
+
+#msg {
+  position: absolute;
+  color: rgb(167, 167, 167);
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-size: 12px;
+  left: 20px;
+  bottom: 20px;
+}
+
+#coord {
+  position: absolute;
+  color: rgb(167, 167, 167);
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-size: 12px;
+  right: 20px;
+  bottom: 20px;
 }
