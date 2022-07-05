@@ -1,7 +1,9 @@
 html {
   height: 100vh;
 }
+
 body {
+  height: 100vh;
   margin: 0;
   position: absolute;
   top: 0;
@@ -9,23 +11,93 @@ body {
   right: 0;
   left: 0;
   /* background: rgb(255, 255, 255); */
-  background: radial-gradient(circle at center, rgb(35, 47, 61) 0%, rgb(8, 10, 12) 100%);
+  font-family: 'Exo 2', sans-serif;
+  background: radial-gradient(circle at center, rgb(35, 58, 61) 0%, rgb(8, 10, 12) 100%);
+}
+
+#title {
+  color: #fceb78;
+  font-size: 47px;
+  /* background-color: blue; */
+  border-bottom: solid 1px rgb(252, 235, 120, 0.5);
+  text-align: center;
+  width: 80vw;
+  left: 10vw;
+  height: 90px;
+  padding-top: 30px;
+  position: absolute;
+  z-index: 2;
+}
+
+.container {
+  /* background-color: blue; */
+  display: block;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+.textBoxLeft {
+  position: absolute;
+  display: block;
+  /* background-color: red; */
+  top: 50%;
+  width: 250px;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  left: 10vw;
+  font-size: 24px;
+  color: #fceb78;
+  z-index: 2;
+  border-bottom: solid 1px rgb(252, 235, 120, 0.5);
+  padding-bottom: 20px;
+}
+
+.textBoxRight {
+  position: absolute;
+  display: block;
+  /* background-color: red; */
+  width: 250px;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  right: 10vw;
+  font-size: 24px;
+  color: #fceb78;
+  z-index: 2;
+  border-bottom: solid 1px rgb(252, 235, 120, 0.5);
+  padding-bottom: 20px;
+}
+
+#long {
+  transform: translateY(-180px);
+}
+#alt {
+  transform: translateY(80px);
+}
+#visibility {
+  transform: translateY(-135px);
+}
+#over {
+  transform: translateY(80px);
+}
+
+h2 {
+  font-size: 36px;
+  color: #fceb78;
+  font-weight: 300;
+  margin: 0;
+}
+h3 {
+  font-size: 24px;
+  color: #eab331;
+  font-weight: 600;
+  margin: 0;
 }
 
 #msg {
   position: absolute;
-  color: rgb(167, 167, 167);
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   font-size: 12px;
   left: 20px;
   bottom: 20px;
-}
-
-#coord {
-  position: absolute;
-  color: rgb(167, 167, 167);
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  font-size: 12px;
-  right: 20px;
-  bottom: 20px;
+  color: #fceb78;
 }

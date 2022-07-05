@@ -4,15 +4,27 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@100&display=swap" rel="stylesheet" />
     <link type="text/css" rel="stylesheet" href="main.css" />
     <title>Where's ISS</title>
   </head>
   <body>
     <canvas id="c" style="position: fixed"> Your browser does not support the HTML5 canvas tag. </canvas>
+    <div id="title">Where's ISS?</div>
+    <div class="container">
+      <div class="textBoxLeft" id="date"></div>
+      <div class="textBoxLeft" id="visibility"></div>
+      <div class="textBoxLeft" id="over"></div>
+      <div class="textBoxRight" id="long"></div>
+      <div class="textBoxRight" id="lat"></div>
+      <div class="textBoxRight" id="alt"></div>
+    </div>
     <script defer src="js/app.js" type="module"></script>
     <!-- <button id="btn">Reload</button> -->
     <!-- <pre id="msg"></pre> -->
-    <div id="msg"></div>
+
     <div id="coord"></div>
   </body>
 </html>

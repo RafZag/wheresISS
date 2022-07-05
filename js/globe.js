@@ -7,15 +7,15 @@ class Globe {
   loader = new THREE.TextureLoader();
   mapTexture = this.loader.load('img/worldMap.png');
   mapColor = this.loader.load('img/worldMapColor.png');
-  mapGray = this.loader.load('img/worldMap.jpg');
+  map = this.loader.load('img/worldMap.jpg');
   mapBump = this.loader.load('img/worldMap_bump.jpg');
 
   globeMat = new THREE.MeshPhongMaterial({
     color: 0xffffff,
     // alphaMap: this.mapTexture,
-    map: this.mapColor,
+    map: this.map,
     bumpMap: this.mapBump,
-    bumpScale: 0.005,
+    bumpScale: 0.01,
     // side: THREE.FrontSide,
     // transparent: false,
     // depthTest: true,
