@@ -68,6 +68,18 @@ body {
   padding-bottom: 20px;
 }
 
+#status {
+  position: absolute;
+  display: block;
+  color: #fceb78;
+  z-index: 2;
+  bottom: 40px;
+  width: 40vw;
+  left: 30vw;
+  text-align: center;
+  font-size: 18px;
+}
+
 #long {
   transform: translateY(-180px);
 }
@@ -75,7 +87,7 @@ body {
   transform: translateY(80px);
 }
 #visibility {
-  transform: translateY(-135px);
+  transform: translateY(-137px);
 }
 #over {
   transform: translateY(80px);

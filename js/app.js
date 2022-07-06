@@ -5,7 +5,9 @@ import { Iss } from './iss.js';
 
 const dataURL = 'https://api.wheretheiss.at/v1/satellites/25544';
 let loadedData;
+let controls;
 let positionOver;
+let lat, lon;
 let time = new Date();
 
 // const reloadButton = document.getElementById('btn');
@@ -15,13 +17,21 @@ const coordLatDiv = document.getElementById('lat');
 const coordAltDiv = document.getElementById('alt');
 const visDiv = document.getElementById('visibility');
 const overDiv = document.getElementById('over');
+const statusDiv = document.getElementById('status');
+const container = document.querySelector('.container');
+
+container.style.visibility = 'hidden';
+
+overDiv.style.visibility = 'hidden';
 
 window.addEventListener('resize', onWindowResize);
 
 //////////////////////////
 
 let camera, scene, renderer, canvas;
-let camPosition = new THREE.Vector3(0, 0, 6);
+let camPosition = new THREE.Vector3(0, 0, 5);
+
+const regionNames = new Intl.DisplayNames(['en'], { type: 'region' });
 
 init();
 animate();
@@ -45,10 +55,36 @@ function init() {
   renderer.setClearColor(0x000000, 0);
 
   document.body.appendChild(renderer.domElement);
+
+  // --------------- Controls ----------------
+
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.enablePan = false;
+  //controls.enableZoom = false;
+  controls.enableDamping = true;
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.05;
+
+  // ---------------- lights ----------------
+
+  const light1 = new THREE.DirectionalLight(0xffffff, 0.6);
+  light1.position.set(0, 200, 0);
+  light1.position.multiplyScalar(1.3);
+
+  var light2 = new THREE.DirectionalLight(0xffffff, 0.5);
+  light2.position.set(0, -200, 0);
+  light2.position.multiplyScalar(1.3);
+
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.6); // soft white light
+
+  scene.add(ambientLight);
+  scene.add(light1);
+  scene.add(light2);
 }
 
 function animate(time) {
   requestAnimationFrame(animate);
+  controls.update();
   render();
 }
 
@@ -75,59 +111,54 @@ function disableSelect(event) {
 const earth = new Globe(scene, 2);
 const iss = new Iss(scene, 0, 0, 0);
 
-// lights
-const light1 = new THREE.DirectionalLight(0xffffff, 0.6);
-light1.position.set(0, 200, 0);
-light1.position.multiplyScalar(1.3);
-
-var light2 = new THREE.DirectionalLight(0xffffff, 0.5);
-light2.position.set(0, -200, 0);
-light2.position.multiplyScalar(1.3);
-
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.6); // soft white light
-
-scene.add(ambientLight);
-scene.add(light1);
-scene.add(light2);
-
-// controls
-
-let controls = new OrbitControls(camera, renderer.domElement);
-controls.enablePan = false;
-//controls.enableZoom = false;
-controls.enableDamping = true;
-
 loadData();
 
-async function loadPosition(lat, lon) {
-  const url = `https://api.wheretheiss.at/v1/coordinates/${lat},${lon}`;
-  const response = await fetch(url);
-  positionOver = await response.json();
-  const countryCode = positionOver.country_code === '??' ? 'unknow' : positionOver.country_code;
-  overDiv.innerHTML = `<h3>ISS is over:</h3><h2>${countryCode}</h2>`;
-  // console.log(positionOver);
+async function loadPosition() {
+  if (lat && lon) {
+    const url = `https://api.wheretheiss.at/v1/coordinates/${lat},${lon}`;
+    const response = await fetch(url);
+    if (response.status === 200) {
+      overDiv.style.visibility = 'visible';
+      positionOver = await response.json();
+      const countryCode = positionOver.country_code === '??' ? 'unknow' : regionNames.of(positionOver.country_code);
+      overDiv.innerHTML = `<h3>ISS is over:</h3><h2>${countryCode}</h2>`;
+    } else {
+      overDiv.style.visibility = 'hidden';
+    }
+  }
 }
 
 async function loadData() {
-  const responce = await fetch(dataURL);
-  loadedData = await responce.json();
-  // dateDiv.innerHTML = JSON.stringify(loadedData, undefined, 2);
-  time = new Date(loadedData.timestamp * 1000);
+  const response = await fetch(dataURL);
+  loadedData = await response.json();
+  // console.log(response);
 
-  dateDiv.innerHTML = `<h2>${time.toLocaleTimeString()}<h2><h3>${time.toDateString()}</h3>`;
-  const lon = loadedData.longitude.toFixed(4);
-  const lat = loadedData.latitude.toFixed(4);
-  const alt = loadedData.altitude.toFixed(2);
-  const vis = loadedData.visibility;
-  coordLongDiv.innerHTML = `<h3>longitude:</h3><h2>${lon}&deg;</h2>`;
-  coordLatDiv.innerHTML = `<h3>latitude:</h3><h2>${lat}&deg;</h2>`;
-  coordAltDiv.innerHTML = `<h3>altitude:</h3><h2>${alt}km</h2>`;
+  if (response.status === 200) {
+    statusDiv.innerHTML = '';
+    container.style.visibility = 'visible';
+    // dateDiv.innerHTML = JSON.stringify(loadedData, undefined, 2);
+    time = new Date(loadedData.timestamp * 1000);
 
-  visDiv.innerHTML = `<h3>ISS is in ${vis}</h3>`;
-  iss.setCoords(lon, lat, alt);
-  // loadPosition(lat, lon);
+    dateDiv.innerHTML = `<h2>${time.toLocaleTimeString()}<h2><h3>${time.toDateString()}</h3>`;
+    lon = loadedData.longitude.toFixed(4);
+    lat = loadedData.latitude.toFixed(4);
+    const alt = loadedData.altitude.toFixed(2);
+    const vis = loadedData.visibility;
+    coordLongDiv.innerHTML = `<h3>longitude:</h3><h2>${lon}&deg;</h2>`;
+    coordLatDiv.innerHTML = `<h3>latitude:</h3><h2>${lat}&deg;</h2>`;
+    coordAltDiv.innerHTML = `<h3>altitude:</h3><h2>${alt}km</h2>`;
+
+    const txt = vis === 'eclipsed' ? 'The ISS is in shadow' : 'The ISS is in daylight';
+    visDiv.innerHTML = `<h3>${txt}</h3>`;
+    iss.setCoords(lon, lat, alt);
+    // loadPosition(lat, lon);
+  } else {
+    container.style.visibility = 'hidden';
+    overDiv.style.visibility = 'hidden';
+    statusDiv.innerHTML = `Server sesponse: ${response.statusText}`;
+  }
 }
 
 // iss.setCoords(180, 20, 500);
-
+setInterval(loadPosition, 2500);
 setInterval(loadData, 1000);

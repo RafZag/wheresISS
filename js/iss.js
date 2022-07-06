@@ -8,6 +8,17 @@ class Iss {
   altitude;
   container = new THREE.Object3D();
   gltfLoader = new GLTFLoader();
+  positionLine = new THREE.BufferGeometry();
+
+  lineMat = new THREE.LineBasicMaterial({
+    color: 0xfceb78,
+    transparent: true,
+    opacity: 0.4,
+    depthTest: true,
+    alphaTest: 0.3,
+    linewidth: 4,
+    blending: THREE.AdditiveBlending,
+  });
 
   issMat = new THREE.MeshPhongMaterial({
     color: 0xffffff,
@@ -54,6 +65,15 @@ class Iss {
         this.container.add(this.modelMesh);
 
         // this.container.rotation.x = Math.PI / 2;
+
+        const points = [];
+        points.push(new THREE.Vector3(0, 0, 0));
+        points.push(new THREE.Vector3(0, 2.2, 0));
+
+        const geometry = new THREE.BufferGeometry().setFromPoints(points);
+
+        const line = new THREE.Line(geometry, this.lineMat);
+        this.container.add(line);
         this.scene.add(this.container);
       }.bind(this),
       function (xhr) {
